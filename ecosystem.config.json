@@ -1,0 +1,17 @@
+{
+  "name": "my-blog",
+  "script": "npm",
+  "args": "start",
+  "cwd": "/var/www/my-blog",
+  "instances": 1,
+  "autorestart": true,
+  "watch": false,
+  "max_memory_restart": "1G",
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  },
+  "log_file": "/var/log/pm2/my-blog.log",
+  "out_file": "/var/log/pm2/my-blog-out.log",
+  "error_file": "/var/log/pm2/my-blog-error.log"
+}

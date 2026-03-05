@@ -20,6 +20,11 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+部署说明（静态导出）
+- 已启用静态导出以降低服务器内存占用，适合内存受限的服务器。
+- 生产部署可通过静态导出完成，前端为一组静态文件，通过 nginx/其他静态服务器托管。
+- 以下文件将用于静态导出部署：out 目录、deploy-export.sh、nginx-static.conf。
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

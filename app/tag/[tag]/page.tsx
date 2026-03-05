@@ -1,19 +1,30 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts';
+import { getPostsByTag, getAllTags } from '@/lib/posts';
 import Profile from '@/components/Profile';
 import Sidebar from '@/components/Sidebar';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
-export default function Home() {
-  const posts = getAllPosts();
+export async function generateStaticParams() {
+  const tags = getAllTags();
+  return tags.map((tag) => ({
+    tag,
+  }));
+}
+
+export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
+  const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
+  const posts = getPostsByTag(decodedTag);
 
   return (
     <div className="min-h-screen pt-16">
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-slate-900">我的博客</h1>
-          <p className="text-slate-600 mt-2">分享技术，记录生活</p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            标签：{decodedTag}
+          </h1>
+          <p className="text-slate-600 mt-2">共找到 {posts.length} 篇文章</p>
         </div>
       </header>
 
@@ -29,7 +40,7 @@ export default function Home() {
             <div className="space-y-6">
               {posts.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-sm p-8 border border-slate-100 text-center">
-                  <p className="text-slate-500">暂无文章</p>
+                  <p className="text-slate-500">暂无该标签的文章</p>
                 </div>
               ) : (
                 posts.map((post) => (
@@ -76,14 +87,14 @@ export default function Home() {
                             strokeLinejoin="round"
                             strokeWidth={2}
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                          />
-                        </svg>
+                        />
+                      </svg>
                         {post.category}
                       </span>
                       {post.tags.map((tag) => (
                         <Link
                           key={tag}
-                          href={`/tag/${encodeURIComponent(tag)}`}
+                          href={`/tag/${tag}`}
                           className="inline-flex items-center px-2 py-1 rounded-full bg-slate-100 hover:bg-blue-100 hover:text-blue-700 transition-colors"
                         >
                           #{tag}
